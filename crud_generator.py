@@ -7,7 +7,7 @@ class Crud_generator():
         self.conexao = self._gera_conexao(
             host, user, password, database, port)
         self.nome_tabela = nome_tabela
-
+        print(self.conexao)
         self.nome_coluna = []
         self.padrao_coluna = []
         self.tipo_dado = []

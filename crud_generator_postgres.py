@@ -1,4 +1,4 @@
-from psycopg import *
+import psycopg2 as psycopg
 
 from crud_generator import Crud_generator
 
@@ -10,7 +10,7 @@ class Crud_generator_postgres(Crud_generator):
 
     def _gera_conexao(self, host, user, password, database, port):
         try:
-            db_connection = connect(
+            db_connection = psycopg.connect(
                 host=host, user=user, password=password, port=port)
             print("Database connection made!")
             return db_connection
@@ -40,11 +40,11 @@ class Crud_generator_postgres(Crud_generator):
         self.procedure += ') LANGUAGE plpgsql as $$begin '
 
     def _check_for_pk(self):
-        consulta_pk = '''SELECT               
+        consulta_pk = f'''SELECT               
         pg_attribute.attname
         FROM pg_index, pg_class, pg_attribute, pg_namespace 
         WHERE 
-        pg_class.oid = 'gato'::regclass AND 
+        pg_class.oid = "{self.nome_tabela}"::regclass AND 
         indrelid = pg_class.oid AND 
         nspname = 'public' AND 
         pg_class.relnamespace = pg_namespace.oid AND 
