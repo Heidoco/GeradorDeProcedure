@@ -3,11 +3,9 @@ from mysql.connector import errorcode
 
 
 class Crud_generator():
-    def __init__(self, nome_tabela, host, user, password, database, port):
-        self.conexao = self._gera_conexao(
-            host, user, password, database, port)
+    def __init__(self, nome_tabela, conexao):
+        self.conexao = conexao
         self.nome_tabela = nome_tabela
-        print(self.conexao)
         self.nome_coluna = []
         self.padrao_coluna = []
         self.tipo_dado = []
@@ -224,6 +222,7 @@ class Crud_generator():
         self.criar_procedure_update()
         self.criar_procedure_delete()
         self.criar_procedure_select()
+        self.conexao.commit()
 
 
 if __name__ == '__main__':

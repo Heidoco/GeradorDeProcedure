@@ -1,10 +1,8 @@
-from read_xml import read_xml
-
 import mysql.connector
 import psycopg2 as psycopg
 
 
-def select_connection():
+def select_connection(conexao):
     choice = input("Escolha o banco de dados (1 - MySQL, 2 - PostgreSQL): ")
     options_mapping = {
         '1': 'mysql',
@@ -14,17 +12,15 @@ def select_connection():
     if db_type == 'mysql':
         conn = mysql.connector
         db_connection = conn.connect(
-            host="127.0.0.1", user="root", password="root", database="animais", port=3307
+            host=conexao['host'], user=conexao['user'], password=conexao['password'], database= conexao['database'], port=conexao['port']
         )
     elif db_type == 'postgres':
         conn = psycopg
         db_connection = conn.connect(
-            host="127.0.0.1", user="postgres", password="root", database="animais", port=5432
+            host=conexao['host'], user=conexao['user'], password=conexao['password'], database= conexao['database'], port=conexao['port']
         )
-
-    return db_connection
-
-table_info = read_xml("./xml/tabela.xml")
+    
+    return db_connection, db_type
 
 def map_data_type(column_type):
     type_mappings = {
@@ -66,7 +62,3 @@ def create_table(table_definition, connection):
     finally:
         cursor.close()
         connection.close()
-
-db_connection = select_connection()
-
-create_table(table_info, db_connection)
