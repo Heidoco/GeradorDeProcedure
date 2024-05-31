@@ -1,22 +1,12 @@
-from psycopg import *
+import psycopg2 as psycopg
 
 from crud_generator import Crud_generator
 
 
 class Crud_generator_postgres(Crud_generator):
-    def __init__(self, nome_tabela, host, user, password, database, port):
-        super().__init__(nome_tabela, host,
-                         user, password, database, port)
-
-    def _gera_conexao(self, host, user, password, database, port):
-        try:
-            db_connection = connect(
-                host=host, user=user, password=password, port=port)
-            print("Database connection made!")
-            return db_connection
-        except:
-            print("BBBB")
-
+    def __init__(self, nome_tabela, conexao):
+        super().__init__(nome_tabela, conexao)
+        
     def _get_meta_dados(self):
         select = f"select * from information_schema.columns where table_name = '{self.nome_tabela}'"
         self.cursor.execute(select)
@@ -40,11 +30,11 @@ class Crud_generator_postgres(Crud_generator):
         self.procedure += ') LANGUAGE plpgsql as $$begin '
 
     def _check_for_pk(self):
-        consulta_pk = '''SELECT               
+        consulta_pk = f'''SELECT               
         pg_attribute.attname
         FROM pg_index, pg_class, pg_attribute, pg_namespace 
         WHERE 
-        pg_class.oid = 'gato'::regclass AND 
+        pg_class.oid = '{self.nome_tabela}'::regclass AND 
         indrelid = pg_class.oid AND 
         nspname = 'public' AND 
         pg_class.relnamespace = pg_namespace.oid AND 
@@ -53,7 +43,8 @@ class Crud_generator_postgres(Crud_generator):
         AND indisprimary
         '''
 
-        resultado = self.cursor.execute(consulta_pk)
+        self.cursor.execute(consulta_pk)
+        resultado = self.cursor.fetchall()
 
         for linha in resultado:
             self.nome_pk = linha[0]

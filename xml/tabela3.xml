@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tabela nome="matricula">
+	<colunas>
+		<coluna nome="id_aluno" tipo="int" null="nao"></coluna>
+		<coluna nome="id_disciplina" tipo="int" null="nao"></coluna>
+		<coluna nome="ano" tipo="int" ></coluna>
+		<coluna nome="semestre" tipo="int"></coluna>
+		<coluna nome="mediafinal" tipo="float"></coluna>
+		<coluna nome="quantidadefalta" tipo="int"></coluna>
+	</colunas>
+	<chaveprimaria>
+		<colunas>
+		<coluna>id_aluno</coluna>
+		<coluna>id_disciplina</coluna>
+		<coluna>ano</coluna>
+		<coluna>semestre</coluna>
+		</colunas>
+	</chaveprimaria>
+</tabela>
